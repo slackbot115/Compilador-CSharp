@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+ 
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Analisador</title>
+</head>
+<body>
+
+     <form method="post" enctype="multipart/form-data" asp-controller="Analisador" asp-action="GetFile">
+        <span>Selecione o arquivo:</span>
+
+        <input type="file" id="myFile" name="FileFullPath"/>
+        <br/>
+        <br/>
+        <input type="submit" value="Ler arquivo"></input>
+
+       <h1> </h1>
+    </form>
+    <br/>
+
+    
+
+</body>
+</html>
