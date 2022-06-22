@@ -45,8 +45,7 @@ namespace Compilador.Dominio
 
         public  int contadorTabelaSimbolos = 1;
 
-
-        public List<GeradorItemsLexicos> Analisador(List<char> codigoChar)
+        public List<GeradorItemsSintaticos> Analisador(List<char> codigoChar)
         {
             codigoChar = AdicionaEspacoNoFinalCasoNecessario(codigoChar);
 
@@ -81,6 +80,9 @@ namespace Compilador.Dominio
                         GeradorItemsLexicos novoItem = new GeradorItemsLexicos(lexema, lexema, "Operador Lógico");
                         lexemaTokenSimbolo.Add(novoItem);
                         lexema = "";
+
+                        GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos(lexema);
+                        itensSintaticos.Add(itemSintatico);
                     }
                 }
                 else if (codigoChar[i] == '!' && codigoChar[i + 1] != '=')
@@ -89,6 +91,9 @@ namespace Compilador.Dominio
                     GeradorItemsLexicos novoItem = new GeradorItemsLexicos("!", "!", "Operador Lógico");
                     lexemaTokenSimbolo.Add(novoItem);
                     lexema = "";
+
+                    GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("!");
+                    itensSintaticos.Add(itemSintatico);
                 }
                 else
                 {
@@ -99,6 +104,9 @@ namespace Compilador.Dominio
                         GeradorItemsLexicos novoItem = new GeradorItemsLexicos(lexema, token, "palavra reservada");
                         lexemaTokenSimbolo.Add(novoItem);
                         lexema = "";
+
+                        GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("if");
+                        itensSintaticos.Add(itemSintatico);
                     }
 
                     string simbolo = VerificarSimboloEspecial(codigoChar[i].ToString());
@@ -109,15 +117,20 @@ namespace Compilador.Dominio
                         if (regexIds.IsMatch(lexema))
                         {
                             AdicionaNaTabelaDeSimbolos(lexema, ref contadorTabelaSimbolos, lexemaTokenSimbolo);
+                            
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("ID");
+                            itensSintaticos.Add(itemSintatico);
                         }
                     }
-
 
                     //adiciona numero double 
                     if (regexDouble.IsMatch(lexema))
                     {
                         GeradorItemsLexicos novoItem = new GeradorItemsLexicos(lexema, "NUM_DEC, " + lexema, "Numero decimal");
                         lexemaTokenSimbolo.Add(novoItem);
+
+                        GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("NUM_DEC");
+                        itensSintaticos.Add(itemSintatico);
                     }
 
                     //adiciona numero inteiro 
@@ -125,26 +138,26 @@ namespace Compilador.Dominio
                     {
                         GeradorItemsLexicos novoItem = new GeradorItemsLexicos(lexema, "NUM_INT, " + lexema, "Numero inteiro");
                         lexemaTokenSimbolo.Add(novoItem);
+
+                        GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("NUM_INT");
+                        itensSintaticos.Add(itemSintatico);
                     }
 
                     if ((!string.IsNullOrEmpty(lexema)) && (!regexIds.IsMatch(lexema)) && (!regexInt.IsMatch(lexema)) && (!regexDouble.IsMatch(lexema)))
                     {
-
-                       
-                            GeradorItemsLexicos erroItem = new GeradorItemsLexicos(lexema, "ERRO", "ERRO");
-                            lexemaTokenSimbolo.Add(erroItem);
-                        
-
+                        GeradorItemsLexicos erroItem = new GeradorItemsLexicos(lexema, "ERRO", "ERRO");
+                        lexemaTokenSimbolo.Add(erroItem);
                     }
 
                     //adicionar no simbolo especial
                     if (simbolo != null)
                     {
-
                         GeradorItemsLexicos novoItem = new GeradorItemsLexicos(simbolo, simbolo, "símbolo especial");
                         lexemaTokenSimbolo.Add(novoItem);
-                    }
 
+                        GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos(simbolo);
+                        itensSintaticos.Add(itemSintatico);
+                    }
 
                     if (VerificaExistenciaCaracterComparacao(codigoChar[i]))
                     {
@@ -159,6 +172,9 @@ namespace Compilador.Dominio
                             lexemaTokenSimbolo.Add(novoItem);
                             lexema = "";
 
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("COMP");
+                            itensSintaticos.Add(itemSintatico);
+
                             continue;
                         }
                         //adiciona > < etc...
@@ -166,6 +182,9 @@ namespace Compilador.Dominio
                         {
                             GeradorItemsLexicos novoItem = new GeradorItemsLexicos(codigoChar[i].ToString(), "COMP", "Operador comparação");
                             lexemaTokenSimbolo.Add(novoItem);
+
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("COMP");
+                            itensSintaticos.Add(itemSintatico);
                         }
                     }
 
@@ -176,6 +195,9 @@ namespace Compilador.Dominio
                         {
                             GeradorItemsLexicos novoItem = new GeradorItemsLexicos("==", "COMP", "Operador comparação");
                             lexemaTokenSimbolo.Add(novoItem);
+
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("COMP");
+                            itensSintaticos.Add(itemSintatico);
                         }
 
                         //adiciona =
@@ -183,6 +205,9 @@ namespace Compilador.Dominio
                         {
                             GeradorItemsLexicos novoItem = new GeradorItemsLexicos(operadorAtribuicao.ToString(), operadorAtribuicao.ToString(), "Operador de Atribuição");
                             lexemaTokenSimbolo.Add(novoItem);
+
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("=");
+                            itensSintaticos.Add(itemSintatico);
                         }
                         
                     }
@@ -196,6 +221,9 @@ namespace Compilador.Dominio
                         {
                             GeradorItemsLexicos novoItem = new GeradorItemsLexicos("txt", "Texto ", "Constantes de texto");
                             lexemaTokenSimbolo.Add(novoItem);
+
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos("Texto");
+                            itensSintaticos.Add(itemSintatico);
                         }
                         else
                         {
@@ -217,19 +245,24 @@ namespace Compilador.Dominio
                             GeradorItemsLexicos novoItem = new GeradorItemsLexicos("//", " ", "Comentário");
                             lexemaTokenSimbolo.Add(novoItem);
                             RealizaComentario(ref i, codigoChar, lexema);
-
                         }
                         //adiciona operador aritimético /
                         else if(codigoChar[i] == '/' && codigoChar[i-1] != '/')
                         {
                             GeradorItemsLexicos novoItem = new GeradorItemsLexicos(codigoChar[i].ToString(), codigoChar[i].ToString(), "Operador Aritmético");
                             lexemaTokenSimbolo.Add(novoItem);
+
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos(codigoChar[i].ToString());
+                            itensSintaticos.Add(itemSintatico);
                         }
                         //adiciona operador aritimético diferente de barra
                         else if(codigoChar[i] != '/')
                         {
                             GeradorItemsLexicos novoItem = new GeradorItemsLexicos(codigoChar[i].ToString(), codigoChar[i].ToString(), "Operador Aritmético");
                             lexemaTokenSimbolo.Add(novoItem);
+
+                            GeradorItemsSintaticos itemSintatico = new GeradorItemsSintaticos(codigoChar[i].ToString());
+                            itensSintaticos.Add(itemSintatico);
                         }
                     }
 
@@ -245,7 +278,7 @@ namespace Compilador.Dominio
                 }
             }
 
-            return lexemaTokenSimbolo;
+            return itensSintaticos;
         }
 
         private string RealizaTexto(ref int i, List<char> codigoChar, string lexema)

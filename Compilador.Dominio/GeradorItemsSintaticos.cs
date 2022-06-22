@@ -8,18 +8,16 @@ namespace Compilador.Dominio
 {
     public class GeradorItemsSintaticos
     {
-        public string Lexema { get; set; }
         public string Token { get; set; }
 
-        public GeradorItemsSintaticos(string lexema, string token)
+        public GeradorItemsSintaticos(string token)
         {
-            Lexema = lexema;
             Token = token;
         }
 
         public override string ToString()
         {
-            return ($@"{Lexema}\{Token}");
+            return ($@"{Token}");
         }
     }
 }

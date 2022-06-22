@@ -31,7 +31,7 @@ namespace Compilador.WebApp.Controllers
 
             IEnumerable<string> lines = System.IO.File.ReadLines(caminhoCodigo2);
 
-            List<GeradorItemsLexicos> listAnalisador = new();
+            List<GeradorItemsSintaticos> listAnalisador = new();
 
             foreach (var line in lines)
             {
@@ -43,7 +43,6 @@ namespace Compilador.WebApp.Controllers
                 List<char> linha = line.ToList();
 
                 listAnalisador.AddRange(analisadorLexico.Analisador(linha));
-
             }
 
             List<string> textsList = new List<string>();
