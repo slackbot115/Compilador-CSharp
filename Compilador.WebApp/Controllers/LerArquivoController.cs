@@ -7,6 +7,7 @@ using System.Linq;
 using Compilador.Dominio;
 using Compilador.WebApp.Models;
 using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
 using Compilador.Dominio.Parser;
 
 namespace Compilador.WebApp.Controllers
@@ -86,18 +87,21 @@ namespace Compilador.WebApp.Controllers
             languageParser.AddErrorListener(errorListener);
 
             languageParser.program();
-            
+
+            string retornoSintatico = "";
             if(languageParser.NumberOfSyntaxErrors == 0)
-                Console.WriteLine("Código válido");
+                retornoSintatico += "Código válido";
             else
             {
-                Console.WriteLine("Código inválido");
-                Console.WriteLine("Erro: " + errorListener.Writer);
+                retornoSintatico += "Erro: " + errorListener.Writer + "\r\n";
             }
+            
+            string[] listaTokens = textsList.ToArray();
+            List<object> retornos = new List<object>();
+            retornos.Add(listaTokens);
+            retornos.Add(retornoSintatico);
 
-            string [] texts = textsList.ToArray();
-
-            ViewBag.Data = texts;
+            ViewBag.Data = retornos;
             return View();
 
         }

@@ -8,44 +8,57 @@
 <head>
     <meta name="viewport" content="width=device-width" />
 </head>
-<body>
-    <div>
-        <table style="width:100%">
-            @if(ViewBag.Data.Length < 1 || ViewBag.Data == null){
-                <tr>
-                    <td>A lista de tokens não conseguiu ser gerada...</td>
-                </tr>
-            }
-            else{
-                <tr>
-                    <th>Lexema</th>
-                    <th>Token</th>
-                    <th>Símbolo</th>
-                </tr>
-
-                @foreach (string text in ViewBag.Data) {
-                    string val0 = text.Split(@"\")[0];
-                    string val1 = text.Split(@"\")[1];
-                    string val2 = text.Split(@"\")[2];
-                    @if(val1 == "ERRO")
+    <body>
+        <div>
+            <table style="width:100%">
+                @if (ViewBag.Data[0].Length < 1 || ViewBag.Data == null)
+                {
+                    <tr>
+                        <td>A lista de tokens não conseguiu ser gerada...</td>
+                    </tr>
+                }
+                else
+                {
+                    if (ViewBag.Data[1] == "Código válido")
                     {
-                        <tr style="color:red">
-                            <td>@val0</td>
-                            <td>@val1</td>
-                            <td>@val2</td>
-                        </tr>
+                        <h1 style="color: darkgreen">Código sintáticamente válido</h1>
                     }
                     else
                     {
-                        <tr>
-                            <td>@val0</td>
-                            <td>@val1</td>
-                            <td>@val2</td>
-                        </tr>
+                        <h1 style="color: red">Código sintáticamente inválido</h1>
+                        <h2 style="color: red">@ViewBag.Data[1]</h2>
+                    }
+
+                    <tr>
+                        <th>Lexema</th>
+                        <th>Token</th>
+                        <th>Símbolo</th>
+                    </tr>
+
+                    @foreach (string text in ViewBag.Data[0])
+                    {
+                        string val0 = text.Split(@"\")[0];
+                        string val1 = text.Split(@"\")[1];
+                        string val2 = text.Split(@"\")[2];
+                        @if (val1 == "ERRO")
+                        {
+                            <tr style="color:red">
+                                <td>@val0</td>
+                                <td>@val1</td>
+                                <td>@val2</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@val0</td>
+                                <td>@val1</td>
+                                <td>@val2</td>
+                            </tr>
+                        }
                     }
                 }
-            }
-        </table>
-    </div>
-</body>
+            </table>
+        </div>
+    </body>
 </html>
