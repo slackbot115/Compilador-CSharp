@@ -19,22 +19,28 @@
                 }
                 else
                 {
-                    if (ViewBag.Data[1] == "Código válido")
-                    {
-                        <h1 style="color: darkgreen">Código sintáticamente válido</h1>
-                    }
-                    else
-                    {
-                        <h1 style="color: red">Código sintáticamente inválido</h1>
-                        <h2 style="color: red">@ViewBag.Data[1]</h2>
-                    }
-
-                    <tr>
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#analise_sintatica">Resultado Análise Sintática</button>
+                    <div id="analise_sintatica" class="collapse">
+                        @if (ViewBag.Data[1] == "Código válido")
+                        {
+                            <h1 style="color: darkgreen">Código sintáticamente válido</h1>
+                        }
+                        else
+                        {
+                            <h1 style="color: red">Código sintáticamente inválido</h1>
+                            <h2 style="color: red">@ViewBag.Data[1]</h2>
+                        }
+                    </div>
+                    
+                    <br />
+                    <br />
+                    
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#analise_lexica">Resultado Análise Léxica</button>
+                    <tr id="analise_lexica" class="collapse">
                         <th>Lexema</th>
                         <th>Token</th>
                         <th>Símbolo</th>
                     </tr>
-
                     @foreach (string text in ViewBag.Data[0])
                     {
                         string val0 = text.Split(@"\")[0];
@@ -42,7 +48,7 @@
                         string val2 = text.Split(@"\")[2];
                         @if (val1 == "ERRO")
                         {
-                            <tr style="color:red">
+                            <tr style="color:red" id="analise_lexica" class="collapse">
                                 <td>@val0</td>
                                 <td>@val1</td>
                                 <td>@val2</td>
@@ -50,7 +56,7 @@
                         }
                         else
                         {
-                            <tr>
+                            <tr id="analise_lexica" class="collapse">
                                 <td>@val0</td>
                                 <td>@val1</td>
                                 <td>@val2</td>
